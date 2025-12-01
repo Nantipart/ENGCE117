@@ -9,7 +9,7 @@ int main() {
 
     GetSet(&data, &num);
 
-    printf("\nสมาชิกในเซตที่รับมา:\n");
+    printf("\nMembers of the received set :\n");
     for(int i = 0; i < num; i++){
         printf("%d ", data[i]);
     }
@@ -19,14 +19,14 @@ int main() {
 }
 
 void GetSet(int **data, int *num) {
-    printf("จำนวนสมาชิก: ");
+    printf("Number of members : ");
     scanf("%d", num);
 
     *data = malloc(*num * sizeof(int));
 
-    printf("ป้อนค่าทีละสมาชิก:\n");
+    printf("Enter values ​​one member at a time :\n");
     for(int i = 0; i < *num; i++){
-        printf("สมาชิก %d: ", i+1);
+        printf("Member %d: ", i+1);
         scanf("%d", &(*data)[i]);
     }
 }
