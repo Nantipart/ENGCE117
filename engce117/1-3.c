@@ -1,34 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *GetSet( int * );
+int *GetSet(int *memberCount);
 
 int main() {
-    int *data, num;
-    data = GetSet( &num );
+    int *resultSet; 
+    int count = 0;
+
+    resultSet = GetSet(&count);
 
     printf("Output: ");
-    for(int i=0; i<num; i++) {
-        printf("%d ", data[i]);
+    for(int i = 0; i < count; i++) {
+        printf("%d ", resultSet[i]);
     }
     printf("\n");
-    free(data); 
+
+    // คืนค่าหน่วยความจำ
+    if (resultSet != NULL) {
+        free(resultSet);
+    }
 
     return 0;
 }
+int *GetSet(int *memberCount) {
+    int *setArray; // เปลี่ยนชื่อตัวแปรให้สื่อความหมาย
 
-int *GetSet(int *num) {
-    int *arr;
-    printf("Number of members: "); 
-    scanf("%d", num);
+    printf("Number of members: ");
+    scanf("%d", memberCount);
 
-    arr = (int*) malloc(*num * sizeof(int));
+    setArray = (int*) malloc(*memberCount * sizeof(int));
 
-    printf("Input values:\n");
-    for(int i = 0; i < *num; i++) {
-        printf("Member %d: ", i+1);
-        scanf("%d", &arr[i]);
+    if (setArray == NULL) {
+        printf("Memory allocation error\n");
+        exit(1); 
     }
 
-    return arr;
+    printf("Input values:\n");
+    for (int k = 0; k < *memberCount; k++) {
+        printf("Member %d: ", k + 1);
+        scanf("%d", &setArray[k]);
+    }
+
+    return setArray;
 }
