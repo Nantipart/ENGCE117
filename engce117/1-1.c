@@ -6,6 +6,7 @@ int main() {
     int i = 0 ;
     // Prompt user for number of times to print "Hello World"
 
+    printf("insert the number : ");
     scanf( "%d",&n ) ;
     // insert the number of times to print "Hello World"
 
