@@ -20,29 +20,31 @@ int main() {
 }
 // ----------------------------------------------------
 
-int *GetMatrix(int *row, int *col) {
-    int *matrix_ptr;
+int *GetMatrix(int *ptrRow, int *ptrCol) {
+    int *myMatrix; // เปลี่ยนชื่อจาก matrix_ptr เป็น myMatrix
 
-    // 1. รับจำนวนแถวและคอลัมน์
-    printf("Enter number of rows and columns: ");
-    scanf("%d %d", row, col);
+    // 1. รับขนาดมิติของเมทริกซ์
+    // ใช้คำสั่ง printf นำทางเพื่อให้รู้ว่าต้องกรอกอะไร
+    printf("Enter dimensions (Rows Cols): ");
+    scanf("%d %d", ptrRow, ptrCol);
 
-    // 2. จองพื้นที่หน่วยความจำ
-    // ขนาด = แถว x คอลัมน์ x ขนาดของ int
-    matrix_ptr = (int *)malloc((*row) * (*col) * sizeof(int));
+    // 2. จองพื้นที่หน่วยความจำ (Allocation)
+    // สูตร: แถว * คอลัมน์ * ขนาดของ int
+    int totalSize = (*ptrRow) * (*ptrCol);
+    myMatrix = (int *)malloc(totalSize * sizeof(int));
 
-    // เช็คว่าจองสำเร็จไหม
-    if (matrix_ptr == NULL) {
-        printf("Memory allocation failed!\n");
-        exit(1);
+    // ตรวจสอบว่าจองได้จริงไหม (แก้เรื่อง Stability CLO4)
+    if (myMatrix == NULL) {
+        return NULL; // ถ้าจองไม่ได้ให้ส่งค่าว่างกลับไป
     }
 
-    // 3. รับค่าสมาชิก
-    printf("Enter matrix elements:\n");
-    for (int i = 0; i < (*row) * (*col); i++) {
-        scanf("%d", &matrix_ptr[i]);
+    // 3. รับค่าสมาชิกแต่ละตัว
+    printf("Input data elements:\n");
+    for (int k = 0; k < totalSize; k++) {
+        // ใช้ scanf รับค่าใส่ใน pointer array โดยตรง
+        scanf("%d", &myMatrix[k]);
     }
 
-    // 4. ส่ง Pointer กลับ
-    return matrix_ptr;
+    // 4. ส่ง address ของ array กลับไป
+    return myMatrix;
 }
