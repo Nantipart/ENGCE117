@@ -4,6 +4,7 @@
 int main() {
     int n = 0 ;
     int i = 0 ;
+    // Prompt user for number of times to print "Hello World"
 
     scanf( "%d",&n ) ;
 
