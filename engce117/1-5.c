@@ -1,36 +1,29 @@
 #include <stdio.h>
 
-// Function to get matrix values and display it
-void GetMatrix(int value[], int *row, int *col);
+void GetMatrix(int arr[], int *r, int *c);
 
 int main() {
-    int m, n;               // Number of rows and columns
-    int data[100];          // Matrix data
-    GetMatrix(data, &m, &n); // Call function to get and display matrix
+    int m, n;
+    int data[100];
+    GetMatrix(data, &m, &n);
 
     return 0;
 }
 
-// Function to input matrix values and display the matrix
-void GetMatrix(int value[], int *row, int *col) {
-    // Get number of rows and columns
-    printf("Enter the number of rows: ");
-    scanf("%d", row);
-    printf("Enter the number of columns: ");
-    scanf("%d", col);
+void GetMatrix(int arr[], int *r, int *c) {
+    printf("Rows: ");
+    scanf("%d", r);
+    printf("Cols: ");
+    scanf("%d", c);
 
-    // Get matrix values from user
-    int total_elements = (*row) * (*col);
-    for (int i = 0; i < total_elements; i++) {
-        printf("Enter value for element %d: ", i + 1);
-        scanf("%d", &value[i]);
+    for (int i = 0; i < *r * *c; i++) {
+        printf("Element %d: ", i + 1);
+        scanf("%d", &arr[i]);
     }
 
-    // Display the matrix
-    printf("The matrix is:\n");
-    for (int i = 0; i < *row; i++) {
-        for (int j = 0; j < *col; j++) {
-            printf("%d ", value[i * (*col) + j]);
+    for (int i = 0; i < *r; i++) {
+        for (int j = 0; j < *c; j++) {
+            printf("%d ", arr[i * *c + j]);
         }
         printf("\n");
     }
