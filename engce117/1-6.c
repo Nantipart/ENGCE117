@@ -1,55 +1,48 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> // For malloc and free
 
-// Function Prototype
-int *GetMatrix(int *row, int *col);
+// Declare the prototype of the GetMatrix function
+int* GetMatrix(int *row, int *col);
 
 int main() {
     int *data, m, n;
 
-    // Call the function
+    // Get the matrix from user input and print it
     data = GetMatrix(&m, &n);
 
-    printf("\n--- Result ---\n");
-    printf("Matrix Size: %d x %d", m, n);
-    printf("\nData: ");
-    for(int i = 0; i < m * n; i++) {
-        printf("%d ", data[i]);
-    }
-    printf("\n");
+    // Free allocated memory
+    free(data);
 
     return 0;
 }
-// ----------------------------------------------------
 
-int *GetMatrix(int *ptrRow, int *ptrCol) {
-    int *myMatrix; // Pointer to hold the matrix data
+int* GetMatrix(int *row, int *col) {
+    // Ask the user for the number of rows and columns
+    printf("Enter number of rows: ");
+    scanf("%d", row);
+    printf("Enter number of columns: ");
+    scanf("%d", col);
 
-    // 1. Get matrix dimensions
-    // Prompt user for input
-    printf("Enter dimensions (Rows): ");
-    scanf("%d", ptrRow, ptrCol);
-    printf("Enter dimensions (Cols): ");
-    scanf("%d", ptrCol);
+    // Dynamically allocate memory for the matrix
+    int *matrix = (int *)malloc((*row) * (*col) * sizeof(int));
 
-
-    // 2. Allocate memory dynamically
-    // Calculate total size: rows * columns * size of int
-    int totalSize = (*ptrRow) * (*ptrCol);
-    myMatrix = (int *)malloc(totalSize * sizeof(int));
-
-    // Verify memory allocation (Fix for CLO4: Stability issue)
-    if (myMatrix == NULL) {
-        return NULL; // Return NULL if allocation fails
+    // Ask the user to input the values for the matrix
+    printf("Enter the values for the matrix:\n");
+    for (int i = 0; i < (*row); i++) {
+        for (int j = 0; j < (*col); j++) {
+            printf("Matrix[%d][%d]: ", i, j);
+            scanf("%d", &matrix[i * (*col) + j]);
+        }
     }
 
-    // 3. Input matrix elements
-    printf("Input data elements:\n");
-    for (int k = 0; k < totalSize; k++) {
-        // Read input directly into the allocated array
-        scanf("%d", &myMatrix[k]);
+    // Print the matrix
+    printf("The matrix you entered is:\n");
+    for (int i = 0; i < (*row); i++) {
+        for (int j = 0; j < (*col); j++) {
+            printf("%d ", matrix[i * (*col) + j]);
+        }
+        printf("\n");
     }
 
-    // 4. Return the pointer to the allocated memory
-    return myMatrix;
+    return matrix;
 }
