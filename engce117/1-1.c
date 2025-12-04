@@ -1,18 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
-    int n = 0 ;
-    int i = 0 ;
-    // Prompt user for number of times to print "Hello World"
+    int n = 0;
+    int i = 0;
 
-    printf("insert the number : ");
-    scanf( "%d",&n ) ;
-    // insert the number of times to print "Hello World"
+    if (scanf("%d", &n) != 1) {
+        printf("Invalid input\n");
+        return 1;
+    }
 
-    for( i = 1 ; i <= n ; i++ ){
-        printf( "[%d] Hello World\n",i ) ;
-    }//end for
+    for (i = 1; i <= n; i++) {
+        printf("[%d] Hello World\n", i);
+    }
 
-    return 0 ;
-}//end function 
+    return 0;
+}
