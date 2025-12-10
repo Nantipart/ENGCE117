@@ -1,5 +1,5 @@
 {
-  "C_Cpp.default.compilerPath": "c:\\Users\\jamel\\OneDrive\\Documents\\GitHub\\ENGCE117\\engce117\\1-2.c",
+  "C_Cpp.default.compilerPath": "C:/mingw64/bin/gcc.exe",
   "C_Cpp.errorSquiggles": "enabled",
   "files.associations": {
     "stdlib.h": "c"
