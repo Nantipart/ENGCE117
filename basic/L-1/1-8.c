@@ -1,23 +1,27 @@
 #include <stdio.h>
 
 int main() {
-    int number;
-    int valid = 0;   
-    // input status
+    int dayCode, hour;
+    int isWorkday = 0;
 
-    while (!valid) {
-        printf("Enter a number (1-10): ");
+    scanf("%d %d", &dayCode, &hour);
 
-        if (scanf("%d", &number) == 1 && number >= 1 && number <= 10) {
-            valid = 1;               
-            // correct input
-        } else {
-            printf("Error: Value must be 1-10.\n");
-            while (getchar() != '\n'); 
-            // clear buffer
-        }
+    switch (dayCode) {
+        case 1: case 2: case 3: case 4: case 5:
+            isWorkday = 1;
+            break;
+        case 6: case 7:
+            printf("Weekend Relax Mode\n");
+            return 0;
+        default:
+            printf("Invalid Day Code\n");
+            return 0;
     }
 
-    printf("Input accepted: %d\n", number);
+    if (isWorkday && hour >= 8 && hour <= 17)
+        printf("System Running (Workday)\n");
+    else
+        printf("System Idle (Off-hours)\n");
+
     return 0;
 }
