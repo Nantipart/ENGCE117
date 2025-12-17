@@ -26,5 +26,5 @@ int main() {
     }
 
     printf("%.2f\n", totalBill);
-    return 0;
+    return 0; 
 }
