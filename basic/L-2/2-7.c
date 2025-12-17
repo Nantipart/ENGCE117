@@ -1,22 +1,16 @@
 #include <stdio.h>
 
 int main() {
-    int N, i;
-    int fizzBuzz = 0, fizz = 0, buzz = 0, other = 0;
+    int N;
+    int fizzBuzz, fizz, buzz, other;
 
     if (scanf("%d", &N) != 1)
         return 1;
 
-    for (i = 1; i <= N; i++) {
-        if (i % 15 == 0)              // divisible by both
-            fizzBuzz++;
-        else if (i % 3 == 0)          // divisible by 3
-            fizz++;
-        else if (i % 5 == 0)          // divisible by 5
-            buzz++;
-        else
-            other++;
-    }
+    fizzBuzz = N / 15;            // divisible by 3 and 5
+    fizz = N / 3 - fizzBuzz;      // divisible by 3 only
+    buzz = N / 5 - fizzBuzz;      // divisible by 5 only
+    other = N - (fizzBuzz + fizz + buzz);
 
     printf("Count FizzBuzz (by 15): %d\n", fizzBuzz);
     printf("Count Fizz (by 3 only): %d\n", fizz);
