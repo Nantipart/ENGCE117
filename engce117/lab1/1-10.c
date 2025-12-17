@@ -1,18 +1,19 @@
 #include <stdio.h>
 
 int main() {
-    int clearanceLevel, age, isActive;
+    int level, age, active;
+    int granted = 0;   // access flag
 
-    // read input
-    if (scanf("%d %d %d", &clearanceLevel, &age, &isActive) != 3)
+    if (scanf("%d %d %d", &level, &age, &active) != 3)
         return 1;
 
-    // check access
-    if ((clearanceLevel == 3 && isActive == 1) ||
-        (clearanceLevel == 2 && age >= 25 && isActive == 1))
-        printf("Access Granted\n");
-    else
-        printf("Access Denied\n");
+    if (active) {
+        if (level == 3)
+            granted = 1;
+        else if (level == 2 && age >= 25)
+            granted = 1;
+    }
 
+    printf(granted ? "Access Granted\n" : "Access Denied\n");
     return 0;
 }
