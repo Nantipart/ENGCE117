@@ -1,30 +1,28 @@
 #include <stdio.h>
 
 int main() {
-    int N_MONTHS, month;
+    int N_MONTHS, m;
     int successCount = 0;
-    float dailyDeposit, monthlyTotal;
+    float deposit, sum;
 
     if (scanf("%d", &N_MONTHS) != 1)
         return 1;
 
-    for (month = 1; month <= N_MONTHS; month++) {
-        monthlyTotal = 0.0;
+    for (m = 1; m <= N_MONTHS; m++) {
+        sum = 0.0;
 
-        while (1) {
-            if (scanf("%f", &dailyDeposit) != 1)
+        do {
+            if (scanf("%f", &deposit) != 1)
                 return 1;
 
-            if (dailyDeposit == 0.00)     // end of daily input
-                break;
+            if (deposit > 0)
+                sum += deposit;
 
-            monthlyTotal += dailyDeposit; // accumulate
-        }
+        } while (deposit != 0.00);
 
-        printf("Month %d Total: %.2f\n", month, monthlyTotal);
+        printf("Month %d Total: %.2f\n", m, sum);
 
-        if (monthlyTotal >= 500.00)
-            successCount++;
+        successCount += (sum >= 500.00);   // count success
     }
 
     printf("Success Count: %d\n", successCount);
