@@ -1,23 +1,27 @@
 #include <stdio.h>
 
-// Function to read numbers and print in reverse
-void readReverse(int n) {
-    int x;
-    if (n == 0)
-        return;
-
-    scanf("%d", &x);
-    readReverse(n - 1);
-    printf("%d\n", x);
-}
-
 int main() {
-    int N;
+    int N, i;
 
-    if (scanf("%d", &N) != 1)
+    // 1. รับค่า N
+    if (scanf("%d", &N) != 1) {
         return 1;
+    }
 
-    readReverse(N);
+    // 2. ประกาศ Array ขนาด N
+    int scores[N];
+
+    // 3. รับค่าตัวเลข N ตัว เก็บลง Array
+    for (i = 0; i < N; i++) {
+        if (scanf("%d", &scores[i]) != 1) {
+            return 1;
+        }
+    }
+
+    // 4. แสดงผลจากท้ายไปหน้า
+    for (i = N - 1; i >= 0; i--) {
+        printf("%d\n", scores[i]);
+    }
 
     return 0;
 }
