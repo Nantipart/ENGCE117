@@ -6,7 +6,8 @@ int main() {
     for (int i = 1; i <= N; i++) {
         sum += i;
     }
+    //////////////////
     printf("%d", sum);
     return 0;
-    // End of program from 1 to N  
+    // End of program fr
 }
