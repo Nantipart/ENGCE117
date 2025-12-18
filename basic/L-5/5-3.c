@@ -37,12 +37,10 @@ int main() {
     return 0;
 }
 
-// Function to calculate sum of array elements.
 int calculate_sum(int array[], int size) {
     int sum = 0;
     int i;
     
-    // Iterate through array to accumulate sum.
     for (i = 0; i < size; i++) {
         sum += array[i];
     }
