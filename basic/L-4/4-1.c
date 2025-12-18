@@ -3,22 +3,22 @@
 int main() {
     int N, i;
 
-    // 1. รับค่า N
+    // Read number of elements
     if (scanf("%d", &N) != 1) {
         return 1;
     }
 
-    // 2. ประกาศ Array ขนาด N
+    // Declare array of size N
     int scores[N];
 
-    // 3. รับค่าตัวเลข N ตัว เก็บลง Array
+    // Input N integers into array
     for (i = 0; i < N; i++) {
         if (scanf("%d", &scores[i]) != 1) {
             return 1;
         }
     }
 
-    // 4. แสดงผลจากท้ายไปหน้า
+    // Print values in reverse order
     for (i = N - 1; i >= 0; i--) {
         printf("%d\n", scores[i]);
     }
