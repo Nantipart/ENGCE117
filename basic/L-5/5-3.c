@@ -1,49 +1,52 @@
 #include <stdio.h>
 
-#define SIZE 5
+#define LIMIT 5 
 
-// Function prototype declaration.
-int calculate_sum(int array[], int size);
+// Function Prototype 
+int calculate_sum(int arr[], int size);
 
 int main() {
-    int numbers[SIZE];
-    int total_sum;
-    float average;
-    int i;
-
-    // Receive 5 integers from user.
-    printf("Enter %d integer numbers:\n", SIZE);
-    for (i = 0; i < SIZE; i++) {
-        printf("Number %d: ", i + 1);
-        scanf("%d", &numbers[i]);
+    int data[LIMIT];      
+    int result_sum;
+    float final_avg;
+    int k;               
+    printf("Input %d integers numbers:\n", LIMIT);
+    for (k = 0; k < LIMIT; k++) {
+        printf("Number %d: ", k + 1);
+        scanf("%d", &data[k]);
     }
 
-    // Call function to calculate total sum.
-    total_sum = calculate_sum(numbers, SIZE);
+    result_sum = calculate_sum(data, LIMIT);
 
-    // Calculate average value.
-    average = (float)total_sum / SIZE;
+    final_avg = (float)result_sum / LIMIT;
 
     // Display final report.
-    printf("\n--- ARRAY AVERAGE REPORT ---\n");
-    printf("Recorded Numbers: ");
-    for (i = 0; i < SIZE; i++) {
-        printf("%d ", numbers[i]);
+    printf("\n=== ARRAY AVERAGE REPORT ===\n");
+    printf("Recorded Numbers: { ");
+    for (k = 0; k < LIMIT; k++) {
+        printf("%d", data[k]);
+        if (k < LIMIT - 1) { 
+            printf(", ");
+        }
     }
-    printf("\n");
-    printf("Total Sum: %d\n", total_sum);
-    printf("Average: %.2f\n", average);
+    printf(" }\n");
+
+    printf("Total Sum : %d\n", result_sum);
+    printf("Average   : %.2f\n", final_avg);
 
     return 0;
 }
 
-int calculate_sum(int array[], int size) {
-    int sum = 0;
-    int i;
-    
-    for (i = 0; i < size; i++) {
-        sum += array[i];
+// Function Definition
+int calculate_sum(int arr[], int size) {
+    int total = 0;
+    int idx = 0;
+
+    // Iterate through array to accumulate sum.
+    while (idx < size) {
+        total += arr[idx];
+        idx++;
     }
-    
-    return sum;
+
+    return total;
 }
