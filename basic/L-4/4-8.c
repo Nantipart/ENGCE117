@@ -1,56 +1,46 @@
 #include <stdio.h>
 
 #define MAX_SIZE 10
-#define UNVISITED 0
-#define VISITED 1
 
 int main() {
     int data[MAX_SIZE];
-    int status[MAX_SIZE];
-    int N;
-    int i, j;
+    int N, i, j;
     int count;
 
-    for (i = 0; i < MAX_SIZE; i++) {
-        status[i] = UNVISITED;
-    }
-
-    printf("Enter the number of elements (N, max %d): ", MAX_SIZE);
     scanf("%d", &N);
 
-    if (N > MAX_SIZE || N < 1) {
+    if (N < 1 || N > MAX_SIZE) {
         N = MAX_SIZE;
     }
 
-    printf("Enter %d integer numbers:\n", N);
     for (i = 0; i < N; i++) {
-        printf("Element %d: ", i + 1);
         scanf("%d", &data[i]);
+    }
+
+    // Sort array (Ascending Order)
+    for (i = 0; i < N - 1; i++) {
+        for (j = i + 1; j < N; j++) {
+            if (data[i] > data[j]) {
+                int temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+            }
+        }
     }
 
     printf("\n--- FREQUENCY ANALYSIS REPORT ---\n");
     printf("Total elements recorded (N): %d\n", N);
-    printf("Recorded Numbers: ");
-    for (i = 0; i < N; i++) {
-        printf("%d ", data[i]);
-    }
-    printf("\n");
 
     printf("\n--- FREQUENCY TABLE ---\n");
     printf("Number | Frequency\n");
     printf("-------|----------\n");
 
     for (i = 0; i < N; i++) {
-        if (status[i] == VISITED) {
-            continue;
-        }
-
         count = 1;
-        for (j = i + 1; j < N; j++) {
-            if (data[i] == data[j]) {
-                count++;
-                status[j] = VISITED;
-            }
+
+        while (i < N - 1 && data[i] == data[i + 1]) {
+            count++;
+            i++;
         }
 
         printf("   %d   |    %d\n", data[i], count);
