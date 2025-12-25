@@ -1,36 +1,43 @@
 #include <stdio.h>
 
-struct student {
-    char name[ 20 ];
+//Student information structure
+struct StudentInfo {
+    char name[20];
     int age;
-    char sex;
+    char gender;
     float gpa;
 };
 
-void upgrade( struct student *child );
+
+void adjust_gpa(struct StudentInfo *s);
 
 int main() {
-    struct student aboy;
+    struct StudentInfo student1;
 
-    // Initialize data.
-    aboy.sex = 'M';
-    aboy.gpa = 3.00;
+    /* Initial values */
+    student1.gender = 'M';
+    student1.gpa = 3.00;
 
-    // Call function: Pass the address of 'aboy' using '&'.
-    upgrade( &aboy );
+    /* Update GPA via pointer */
+    adjust_gpa(&student1);
 
-    // Print result (GPA will be updated to 3.30).
-    printf( "%.2f", aboy.gpa );
-    
+    /* Display updated GPA */
+    printf("Updated GPA: %.2f\n", student1.gpa);
+
     return 0;
 }
 
-void upgrade( struct student *child ) {
-    if ( child->sex == 'M' ) {
-        child->gpa *= 1.10; 
-        // Increase 10%
+/* Function definition */
+void adjust_gpa(struct StudentInfo *s) {
+    float rate;
+
+    /* Determine increase rate */
+    if (s->gender == 'M') {
+        rate = 1.10;
     } else {
-        child->gpa *= 1.20; 
-        // Increase 20%
+        rate = 1.20;
     }
+
+    /* Apply GPA adjustment */
+    s->gpa = s->gpa * rate;
 }
