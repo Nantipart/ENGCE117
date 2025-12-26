@@ -27,9 +27,10 @@ int main() {
     }
 
     /* Show results back */
-    for (int i = n - 1; i >= 0; i--) {
-        printf("%d\n", arr[i]);
+    for (int *q = arr + n - 1; q >= arr; q--) {
+    printf("%d\n", *q);
     }
+
 
     free(arr);
     return 0;
