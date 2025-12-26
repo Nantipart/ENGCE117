@@ -1,27 +1,30 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
-    int total_numbers;
-    int idx = 0;
+    int N;
 
-    // 1. Receive the count of numbers (N).
-    if (scanf("%d", &total_numbers) != 1) return 1;
-
-    // 2. Declare variable length array.
-    int arr_data[total_numbers];
-
-    // 3. Input loop: Using 'while' instead of 'for'.
-    while (idx < total_numbers) {
-        if (scanf("%d", &arr_data[idx]) != 1) return 1;
-        idx++;
+    if (scanf("%d", &N) != 1 || N <= 0) {
+        return 1;
     }
 
-    // 4. Reverse output loop: Start from last index down to 0.
-    idx = total_numbers - 1;
-    while (idx >= 0) {
-        printf("%d\n", arr_data[idx]);
-        idx--;
+    int *scores = (int *)malloc(N * sizeof(int));
+    if (scores == NULL) {
+        return 1;
     }
 
+    for (int i = 0; i < N; i++) {
+        if (scanf("%d", scores + i) != 1) {
+            free(scores);
+            return 1;
+        }
+    }
+
+    for (int *p = scores + N - 1; p >= scores; p--) {
+        printf("%d\n", *p);
+    }
+
+    free(scores);
     return 0;
+    // End of main
 }
