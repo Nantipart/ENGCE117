@@ -2,29 +2,35 @@
 #include <stdlib.h>
 
 int main() {
-    int N;
-
-    if (scanf("%d", &N) != 1 || N <= 0) {
+    int n;
+    
+    /* Get the value N */
+    if (scanf("%d", &n) != 1 || n <= 0) {
         return 1;
     }
 
-    int *scores = (int *)malloc(N * sizeof(int));
-    if (scores == NULL) {
+    /* Reserve dynamic memory */
+    int *arr = (int *)malloc(n * sizeof(int));
+    if (arr == NULL) {
         return 1;
     }
 
-    for (int i = 0; i < N; i++) {
-        if (scanf("%d", scores + i) != 1) {
-            free(scores);
+    /* Receive N numerical values. */
+    int *p = arr;
+    int count = n;
+    while (count--) {
+        if (scanf("%d", p) != 1) {
+            free(arr);
             return 1;
         }
+        p++;
     }
 
-    for (int *p = scores + N - 1; p >= scores; p--) {
-        printf("%d\n", *p);
+    /* Show results back */
+    for (int i = n - 1; i >= 0; i--) {
+        printf("%d\n", arr[i]);
     }
 
-    free(scores);
+    free(arr);
     return 0;
-    // End of main
 }
