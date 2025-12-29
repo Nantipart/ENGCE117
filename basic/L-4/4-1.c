@@ -10,14 +10,14 @@ int main() {
     int arr[N];
     int *ptr = arr;
 
-    /* รับข้อมูลเข้า array */
+    /* Get data into an array */
     for (int k = 0; k < N; k++) {
         if (scanf("%d", ptr + k) != 1) {
             return 1;
         }
     }
 
-    /* แสดงผลย้อนกลับ */
+    /* Show results back */
     for (int k = N - 1; k >= 0; k--) {
         printf("%d\n", *(arr + k));
     }
