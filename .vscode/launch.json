@@ -27,11 +27,11 @@
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": false,
-      "cwd": "c:/Users/jamel/OneDrive/Documents/GitHub/ENGCE117/engce117/lab2",
-      "program": "c:/Users/jamel/OneDrive/Documents/GitHub/ENGCE117/engce117/lab2/build/Debug/outDebug",
+      "externalConsole": true,
+      "cwd": "c:/Users/jamel/OneDrive/Documents/GitHub/ENGCE117/engce117/lab6",
+      "program": "c:/Users/jamel/OneDrive/Documents/GitHub/ENGCE117/engce117/lab6/build/Debug/outDebug",
       "MIMode": "gdb",
-      "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
+      "miDebuggerPath": "gdb",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
