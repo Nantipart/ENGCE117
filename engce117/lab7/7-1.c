@@ -10,129 +10,99 @@ struct studentNode {
     struct studentNode *next;
 };
 
-/* ===== LinkedList ===== */
-typedef struct {
+struct LinkedList {
     struct studentNode *start;
     struct studentNode *now;
-} LinkedList;
+};
 
-/* ===== NewList (ใช้ logic พิเศษ) ===== */
-typedef LinkedList NewList;
+void initList(struct LinkedList *list) {
+    list->start = NULL;
+    list->now = NULL;
+}
 
-/* ===== create node ===== */
-struct studentNode* createNode(char n[], int a, char s, float g) {
-    struct studentNode *p = malloc(sizeof(struct studentNode));
+void InsNode(struct LinkedList *list, char n[], int a, char s, float g) {
+    struct studentNode *p =
+        (struct studentNode*) malloc(sizeof(struct studentNode));
+
     strcpy(p->name, n);
     p->age = a;
     p->sex = s;
     p->gpa = g;
     p->next = NULL;
-    return p;
-}
 
-/* ===== Insert End ===== */
-void InsNode(LinkedList *L, char n[], int a, char s, float g) {
-
-    struct studentNode *node = createNode(n,a,s,g);
-
-    if(L->start == NULL){
-        L->start = node;
-        L->now = node;
-        return;
+    if (list->start == NULL)
+        list->start = p;
+    else {
+        struct studentNode *t = list->start;
+        while (t->next != NULL)
+            t = t->next;
+        t->next = p;
     }
-
-    struct studentNode *t = L->start;
-    while(t->next) t = t->next;
-
-    t->next = node;
-    L->now = node;
 }
 
-/* ===== Delete Now ===== */
-void DelNode(LinkedList *L) {
+void DelNode(struct LinkedList *list) {
+    if (list->start == NULL) return;
 
-    if(L->now == NULL) return;
-
-    if(L->now == L->start){
-        L->start = L->start->next;
-        free(L->now);
-        L->now = L->start;
-        return;
-    }
-
-    struct studentNode *t = L->start;
-    while(t->next != L->now) t = t->next;
-
-    t->next = L->now->next;
-    free(L->now);
-    L->now = t->next;
+    struct studentNode *temp = list->start;
+    list->start = list->start->next;
+    free(temp);
 }
 
-/* ===== Move Next ===== */
-void GoNext(LinkedList *L){
-    if(L->now && L->now->next)
-        L->now = L->now->next;
+void GoNext(struct LinkedList *list) {
+    if (list->now == NULL)
+        list->now = list->start;
+    else if (list->now->next != NULL)
+        list->now = list->now->next;
 }
 
-/* ===== Show current ===== */
-void ShowNode(LinkedList *L){
-    if(L->now)
-        printf("%s %d %c %.2f\n",
-               L->now->name,
-               L->now->age,
-               L->now->sex,
-               L->now->gpa);
-}
+int main() {
 
-/* ===== Show last 2 nodes (NewList style) ===== */
-void ShowNodeNew(NewList *L){
+    struct LinkedList listA;
+    struct LinkedList listB;
+    struct LinkedList *listC;
 
-    struct studentNode *t = L->start;
-    struct studentNode *last = NULL;
-    struct studentNode *before = NULL;
+    initList(&listA);
+    initList(&listB);
 
-    while(t){
-        before = last;
-        last = t;
-        t = t->next;
-    }
+    // listA
+    InsNode(&listA, "one", 1, 'A', 1.1);
+    InsNode(&listA, "two", 2, 'B', 2.2);
+    InsNode(&listA, "three", 3, 'C', 3.3);
 
-    if(before) printf("%s ", before->name);
-    if(last) printf("%s", last->name);
-    printf("\n");
-}
+    // Scroll to "two".
+    GoNext(&listA);  // now = one
+    GoNext(&listA);  // now = two
 
-/* ================= MAIN ================= */
-int main(){
+    printf("%s %d %c %.2f\n",
+           listA.now->name,
+           listA.now->age,
+           listA.now->sex,
+           listA.now->gpa);
 
-    LinkedList listA = {NULL,NULL};
-    NewList listB = {NULL,NULL};
-    LinkedList *listC;
+    // listB
+    InsNode(&listB, "four", 4, 'D', 4.4);
+    InsNode(&listB, "five", 5, 'E', 5.5);
+    InsNode(&listB, "six", 6, 'F', 6.6);
 
-    /* listA */
-    InsNode(&listA,"one",1,'A',1.10);
-    InsNode(&listA,"two",2,'B',2.20);
-    InsNode(&listA,"three",3,'C',3.30);
+    DelNode(&listB);  // ลบ four
 
-    GoNext(&listA);
-    ShowNode(&listA);   // two 2 B 2.20
+    // Now listB = five -> six
+    printf("%s %s\n",
+           listB.start->next->name,   // six
+           listB.start->name);        // five
 
-    /* listB */
-    InsNode(&listB,"four",4,'D',4.40);
-    InsNode(&listB,"five",5,'E',5.50);
-    InsNode(&listB,"six",6,'F',6.60);
-
-    GoNext(&listB);
-    DelNode(&listB);
-
-    ShowNodeNew(&listB); // six four
-
-    /* listC */
+    // Use pointer
     listC = &listA;
-    GoNext(listC);
-    ShowNode(listC);     // one 1 A 1.10
+    printf("%s %d %c %.2f\n",
+           listC->start->name,
+           listC->start->age,
+           listC->start->sex,
+           listC->start->gpa);
 
-    ShowNodeNew(&listB); // six four
+    listC = &listB;
+    printf("%s %s\n",
+           listC->start->next->name,
+           listC->start->name);
 
     return 0;
 }
