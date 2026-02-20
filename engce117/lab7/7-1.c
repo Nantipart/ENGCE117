@@ -20,58 +20,64 @@ void initList(struct LinkedList *list) {
     list->now = NULL;
 }
 
+/* Add a node that can be moved using a pointer */
 void InsNode(struct LinkedList *list, char n[], int a, char s, float g) {
-    struct studentNode *p =
-        (struct studentNode*) malloc(sizeof(struct studentNode));
 
-    strcpy(p->name, n);
-    p->age = a;
-    p->sex = s;
-    p->gpa = g;
-    p->next = NULL;
+    struct studentNode *newNode =
+        (struct studentNode*)malloc(sizeof(struct studentNode));
+
+    if (newNode == NULL) return;
+
+    strcpy(newNode->name, n);
+    newNode->age = a;
+    newNode->sex = s;
+    newNode->gpa = g;
+    newNode->next = NULL;
+
+    /* Use a double pointer to avoid repeating the same pattern */
+    struct studentNode **pp = &(list->start);
+
+    while (*pp != NULL)
+        pp = &((*pp)->next);
+
+    *pp = newNode;
+}
+
+/* Delete the first node. */
+void DelNode(struct LinkedList *list) {
 
     if (list->start == NULL)
-        list->start = p;
-    else {
-        struct studentNode *t = list->start;
-        while (t->next != NULL)
-            t = t->next;
-        t->next = p;
-    }
+        return;
+
+    struct studentNode *removeNode = list->start;
+    list->start = removeNode->next;
+    free(removeNode);
 }
 
-void DelNode(struct LinkedList *list) {
-    if (list->start == NULL) return;
-
-    struct studentNode *temp = list->start;
-    list->start = list->start->next;
-    free(temp);
-}
-
+/* Move to the next node. */
 void GoNext(struct LinkedList *list) {
+
     if (list->now == NULL)
         list->now = list->start;
-    else if (list->now->next != NULL)
+    else
         list->now = list->now->next;
 }
 
 int main() {
 
-    struct LinkedList listA;
-    struct LinkedList listB;
+    struct LinkedList listA, listB;
     struct LinkedList *listC;
 
     initList(&listA);
     initList(&listB);
 
-    // listA
+    /* ---------- listA ---------- */
     InsNode(&listA, "one", 1, 'A', 1.1);
     InsNode(&listA, "two", 2, 'B', 2.2);
     InsNode(&listA, "three", 3, 'C', 3.3);
 
-    // Scroll to "two".
-    GoNext(&listA);  // now = one
-    GoNext(&listA);  // now = two
+    GoNext(&listA);
+    GoNext(&listA);
 
     printf("%s %d %c %.2f\n",
            listA.now->name,
@@ -79,20 +85,20 @@ int main() {
            listA.now->sex,
            listA.now->gpa);
 
-    // listB
+    /* ---------- listB ---------- */
     InsNode(&listB, "four", 4, 'D', 4.4);
     InsNode(&listB, "five", 5, 'E', 5.5);
     InsNode(&listB, "six", 6, 'F', 6.6);
 
-    DelNode(&listB);  // ลบ four
+    DelNode(&listB);
 
-    // Now listB = five -> six
     printf("%s %s\n",
-           listB.start->next->name,   // six
-           listB.start->name);        // five
+           listB.start->next->name,
+           listB.start->name);
 
-    // Use pointer
+    /* ---------- pointer test ---------- */
     listC = &listA;
+
     printf("%s %d %c %.2f\n",
            listC->start->name,
            listC->start->age,
@@ -100,6 +106,7 @@ int main() {
            listC->start->gpa);
 
     listC = &listB;
+
     printf("%s %s\n",
            listC->start->next->name,
            listC->start->name);
