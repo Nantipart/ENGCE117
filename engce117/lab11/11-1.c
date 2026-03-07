@@ -1,44 +1,39 @@
 #include <stdio.h>
 
-int BinSearch(int data[], int n, int find);
+int binarySearch(int arr[], int size, int target);
 
-int main() {
-    int data[6] = {1, 2, 3, 4, 5, 7};
-    int n = 6;
-    int find = 5;
+int main()
+{
+    int numbers[] = {1, 2, 3, 4, 5, 7};
+    int length = 6;
+    int key = 5;
 
-    int pos = BinSearch(data, n, find);
+    int result = binarySearch(numbers, length, key);
 
-    if(pos != -1)
-        printf("Found %d at %d\n", find, pos);
+    if(result >= 0)
+        printf("Value %d found at index %d\n", key, result);
     else
-        printf("Not Found\n");
+        printf("Value not found\n");
 
     return 0;
 }
 
-int BinSearch(int data[], int n, int find)
+int binarySearch(int arr[], int size, int target)
 {
-    int left = 0;
-    int right = n - 1;
-    int mid;
+    int start = 0;
+    int end = size - 1;
 
-    while(left <= right)
+    while(start <= end)
     {
-        mid = left + (right - left) / 2;
+        int middle = (start + end) / 2;
 
-        if(data[mid] == find)
-        {
-            return mid;
-        }
-        else if(data[mid] < find)
-        {
-            left = mid + 1;
-        }
+        if(arr[middle] == target)
+            return middle;
+
+        if(target > arr[middle])
+            start = middle + 1;
         else
-        {
-            right = mid - 1;
-        }
+            end = middle - 1;
     }
 
     return -1;
