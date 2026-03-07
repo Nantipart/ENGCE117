@@ -12,22 +12,20 @@ int main()
 
 long SumLoop(int n)
 {
-    long sum = 0;
-    int i = 1;
+    long total = 0;
 
-    while(i <= n)
+    for(int k = n; k > 0; k--)
     {
-        sum = sum + i;
-        i++;
+        total += k;
     }
 
-    return sum;
+    return total;
 }
 
 long SumRecur(int n)
 {
-    if(n == 0)
-        return 0;
+    if(n <= 1)
+        return 1;
 
     return n + SumRecur(n - 1);
 }
