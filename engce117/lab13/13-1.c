@@ -1,58 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *KnapsackDP(int *w, int *v, int n, int wx);
-
 int *KnapsackDP(int *w, int *v, int n, int wx)
 {
-    int r, c;
+    int i, j;
 
-    int **dp = (int**)malloc((n+1) * sizeof(int*));
-    for(r = 0; r <= n; r++)
-        dp[r] = (int*)calloc(wx+1, sizeof(int));
+    int dp[n+1][wx+1];
 
-    for(r = 1; r <= n; r++)
+    for(i = 0; i <= n; i++)
+        for(j = 0; j <= wx; j++)
+            dp[i][j] = 0;
+
+    for(i = 1; i <= n; i++)
     {
-        for(c = 0; c <= wx; c++)
+        for(j = 0; j <= wx; j++)
         {
-            dp[r][c] = dp[r-1][c];
-
-            if(c >= w[r-1])
+            if(w[i-1] <= j)
             {
-                int val = v[r-1] + dp[r-1][c - w[r-1]];
-                if(val > dp[r][c])
-                    dp[r][c] = val;
+                int take = v[i-1] + dp[i-1][j - w[i-1]];
+                int nottake = dp[i-1][j];
+
+                if(take > nottake)
+                    dp[i][j] = take;
+                else
+                    dp[i][j] = nottake;
+            }
+            else
+            {
+                dp[i][j] = dp[i-1][j];
             }
         }
     }
 
-    int *choose = (int*)calloc(n, sizeof(int));
+    int *x = (int*)calloc(n, sizeof(int));
 
-    int capacity = wx;
-
-    for(r = n; r > 0; r--)
+    j = wx;
+    for(i = n; i > 0; i--)
     {
-        if(dp[r][capacity] != dp[r-1][capacity])
+        if(dp[i][j] != dp[i-1][j])
         {
-            choose[r-1] = 1;
-            capacity -= w[r-1];
+            x[i-1] = 1;
+            j -= w[i-1];
         }
     }
 
-    return choose;
-}
-
-int main()
-{
-    int n = 5, wx = 11;
-
-    int w[5] = {1, 2, 5, 6, 7};
-    int v[5] = {1, 6, 18, 22, 28};
-
-    int *x = KnapsackDP(w, v, n, wx);
-
-    for(int i = 0; i < n; i++)
-        printf("%d", x[i]);
-
-    return 0;
+    return x;
 }
