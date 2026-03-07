@@ -5,50 +5,41 @@ int *KnapsackDP(int *w, int *v, int n, int wx);
 
 int *KnapsackDP(int *w, int *v, int n, int wx)
 {
-    int **table;
-    int i, j;
+    int r, c;
 
-    table = (int**)malloc((n + 1) * sizeof(int*));
-    for(i = 0; i <= n; i++)
-        table[i] = (int*)malloc((wx + 1) * sizeof(int));
+    int **dp = (int**)malloc((n+1) * sizeof(int*));
+    for(r = 0; r <= n; r++)
+        dp[r] = (int*)calloc(wx+1, sizeof(int));
 
-    for(i = 0; i <= n; i++)
+    for(r = 1; r <= n; r++)
     {
-        for(j = 0; j <= wx; j++)
+        for(c = 0; c <= wx; c++)
         {
-            if(i == 0 || j == 0)
-                table[i][j] = 0;
-            else
-            {
-                if(w[i-1] <= j)
-                {
-                    int take = v[i-1] + table[i-1][j - w[i-1]];
-                    int skip = table[i-1][j];
+            dp[r][c] = dp[r-1][c];
 
-                    table[i][j] = (take > skip) ? take : skip;
-                }
-                else
-                    table[i][j] = table[i-1][j];
+            if(c >= w[r-1])
+            {
+                int val = v[r-1] + dp[r-1][c - w[r-1]];
+                if(val > dp[r][c])
+                    dp[r][c] = val;
             }
         }
     }
 
-    int *result = (int*)malloc(n * sizeof(int));
-    for(i = 0; i < n; i++)
-        result[i] = 0;
+    int *choose = (int*)calloc(n, sizeof(int));
 
-    int remain = wx;
+    int capacity = wx;
 
-    for(i = n; i > 0; i--)
+    for(r = n; r > 0; r--)
     {
-        if(table[i][remain] != table[i-1][remain])
+        if(dp[r][capacity] != dp[r-1][capacity])
         {
-            result[i-1] = 1;
-            remain -= w[i-1];
+            choose[r-1] = 1;
+            capacity -= w[r-1];
         }
     }
 
-    return result;
+    return choose;
 }
 
 int main()
@@ -58,9 +49,7 @@ int main()
     int w[5] = {1, 2, 5, 6, 7};
     int v[5] = {1, 6, 18, 22, 28};
 
-    int *x;
-
-    x = KnapsackDP(w, v, n, wx);
+    int *x = KnapsackDP(w, v, n, wx);
 
     for(int i = 0; i < n; i++)
         printf("%d", x[i]);
