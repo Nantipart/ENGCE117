@@ -1,32 +1,32 @@
 #include <stdio.h>
 
-void TowerHanoi(int m, int i, int j);
+void moveTower(int disks, int start, int end);
 
 int main()
 {
-    TowerHanoi(3, 1, 3);
+    int total = 3;
+
+    moveTower(total, 1, 3);
+
     return 0;
 }
 
-void TowerHanoi(int m, int i, int j)
+void moveTower(int disks, int start, int end)
 {
-    int aux;
+    if(disks <= 0)
+        return;
 
-    if(m > 0)
+    int middle = 6 - start - end;
+
+    if(disks > 1)
     {
-        aux = 6 - (i + j);
+        moveTower(disks - 1, start, middle);
+    }
 
-        if(m == 1)
-        {
-            printf("Disc %d from %d to %d\n", m, i, j);
-        }
-        else
-        {
-            TowerHanoi(m - 1, i, aux);
+    printf("Move disk %d from rod %d to rod %d\n", disks, start, end);
 
-            printf("Disc %d from %d to %d\n", m, i, j);
-
-            TowerHanoi(m - 1, aux, j);
-        }
+    if(disks > 1)
+    {
+        moveTower(disks - 1, middle, end);
     }
 }
