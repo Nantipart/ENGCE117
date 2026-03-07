@@ -14,9 +14,10 @@ long SumLoop(int n)
 {
     long total = 0;
 
-    for(int k = n; k > 0; k--)
+    while(n > 0)
     {
-        total += k;
+        total += n;
+        n--;
     }
 
     return total;
@@ -25,7 +26,9 @@ long SumLoop(int n)
 long SumRecur(int n)
 {
     if(n <= 1)
-        return 1;
+        return n;
 
-    return n + SumRecur(n - 1);
+    int mid = n / 2;
+
+    return SumRecur(mid) + SumRecur(n) - SumRecur(mid - 1);
 }
