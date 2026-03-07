@@ -5,53 +5,52 @@ int *KnapsackGreedy(int *w, int *v, int n, int wx);
 
 int *KnapsackGreedy(int *w, int *v, int n, int wx)
 {
-    int *pick = (int*)malloc(n * sizeof(int));
-    float ratio[n];
     int i, j;
 
+    int *choose = (int*)calloc(n, sizeof(int));
+    float *score = (float*)malloc(n * sizeof(float));
+
     for(i = 0; i < n; i++)
-    {
-        pick[i] = 0;
-        ratio[i] = (float)v[i] / w[i];
-    }
+        score[i] = (float)v[i] / w[i];
 
-    for(i = 0; i < n - 1; i++)
+    for(i = 0; i < n-1; i++)
     {
-        for(j = i + 1; j < n; j++)
+        int best = i;
+
+        for(j = i+1; j < n; j++)
         {
-            if(ratio[i] < ratio[j])
-            {
-                float tr = ratio[i];
-                ratio[i] = ratio[j];
-                ratio[j] = tr;
+            if(score[j] > score[best])
+                best = j;
+        }
 
-                int tv = v[i];
-                v[i] = v[j];
-                v[j] = tv;
+        if(best != i)
+        {
+            float ts = score[i];
+            score[i] = score[best];
+            score[best] = ts;
 
-                int tw = w[i];
-                w[i] = w[j];
-                w[j] = tw;
+            int tw = w[i];
+            w[i] = w[best];
+            w[best] = tw;
 
-                int tp = pick[i];
-                pick[i] = pick[j];
-                pick[j] = tp;
-            }
+            int tv = v[i];
+            v[i] = v[best];
+            v[best] = tv;
         }
     }
 
-    int weight = 0;
+    int capacity = 0;
 
     for(i = 0; i < n; i++)
     {
-        if(weight + w[i] <= wx)
+        if(capacity + w[i] <= wx)
         {
-            pick[i] = 1;
-            weight += w[i];
+            choose[i] = 1;
+            capacity += w[i];
         }
     }
 
-    return pick;
+    return choose;
 }
 
 int main()
