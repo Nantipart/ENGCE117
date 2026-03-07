@@ -1,84 +1,84 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define INF 99999
+
 int *Dijkstra(int *L, int n);
 
 int *Dijkstra(int *L, int n)
 {
-    int *dist = (int*)malloc(n * sizeof(int));
-    int *visited = (int*)malloc(n * sizeof(int));
+    int *distance = (int*)malloc(n * sizeof(int));
+    int *used = (int*)calloc(n, sizeof(int));
 
     int i, j;
 
     for(i = 0; i < n; i++)
-    {
-        dist[i] = L[i];
-        visited[i] = 0;
-    }
+        distance[i] = L[i];
 
-    visited[0] = 1;
+    used[0] = 1;
 
     for(i = 1; i < n; i++)
     {
-        int min = 9999;
-        int node = -1;
+        int best = INF;
+        int current = -1;
 
         for(j = 1; j < n; j++)
         {
-            if(!visited[j] && dist[j] >= 0 && dist[j] < min)
+            if(!used[j] && distance[j] != -1 && distance[j] < best)
             {
-                min = dist[j];
-                node = j;
+                best = distance[j];
+                current = j;
             }
         }
 
-        if(node == -1)
+        if(current == -1)
             break;
 
-        visited[node] = 1;
+        used[current] = 1;
 
         for(j = 1; j < n; j++)
         {
-            int weight = L[node * n + j];
+            int edge = L[current * n + j];
 
-            if(weight != -1 && !visited[j])
+            if(edge != -1 && !used[j])
             {
-                int newDist = dist[node] + weight;
+                int candidate = distance[current] + edge;
 
-                if(dist[j] == -1 || newDist < dist[j])
-                    dist[j] = newDist;
+                if(distance[j] == -1 || candidate < distance[j])
+                    distance[j] = candidate;
             }
         }
     }
 
-    return dist;
+    return distance;
 }
 
 int main()
 {
-    int n = 5, i = 0, j = 0, *d, *g;
+    int n = 5;
+    int i, j;
 
-    g = (int*)malloc(n * n * sizeof(int));
+    int *graph = (int*)malloc(n * n * sizeof(int));
 
     for(i = 0; i < n; i++)
         for(j = 0; j < n; j++)
-            g[i * n + j] = -1;
+            graph[i * n + j] = -1;
 
-    g[0 * n + 1] = 100; 
-    g[0 * n + 2] = 80;
-    g[0 * n + 3] = 30; 
-    g[0 * n + 4] = 10;
+    graph[0 * n + 1] = 100;
+    graph[0 * n + 2] = 80;
+    graph[0 * n + 3] = 30;
+    graph[0 * n + 4] = 10;
 
-    g[1 * n + 2] = 20; 
-    g[3 * n + 1] = 20;
+    graph[1 * n + 2] = 20;
+    graph[3 * n + 1] = 20;
 
-    g[3 * n + 2] = 20; 
-    g[4 * n + 3] = 10;
+    graph[3 * n + 2] = 20;
+    graph[4 * n + 3] = 10;
 
-    d = Dijkstra(g, n);
+    int *result = Dijkstra(graph, n);
 
-    for(i = 0; i < n - 1; i++)
-        printf("%d ", d[i + 1]);
+    for(i = 1; i < n; i++)
+        printf("%d ", result[i]);
 
     return 0;
 }
