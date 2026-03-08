@@ -2,67 +2,67 @@
 #include <stdlib.h>
 
 /* Dynamic Programming Knapsack */
-int *KnapsackDP(int *w, int *v, int n, int maxW)
+int *KnapsackDP(int *weight, int *value, int itemCount, int capacity)
 {
-    int i, j;
+    int i, w;
 
-    /* allocate DP matrix */
-    int **dp = (int**)malloc((n + 1) * sizeof(int*));
-    for(i = 0; i <= n; i++)
-        dp[i] = (int*)malloc((maxW + 1) * sizeof(int));
+    /* create DP table */
+    int **table = (int**)malloc((itemCount + 1) * sizeof(int*));
 
-    /* set initial values */
-    for(i = 0; i <= n; i++)
+    for(i = 0; i <= itemCount; i++)
+        table[i] = (int*)malloc((capacity + 1) * sizeof(int));
+
+    /* initialize table with 0 */
+    for(i = 0; i <= itemCount; i++)
+        for(w = 0; w <= capacity; w++)
+            table[i][w] = 0;
+
+    /* fill DP table */
+    for(i = 1; i <= itemCount; i++)
     {
-        for(j = 0; j <= maxW; j++)
+        for(w = 0; w <= capacity; w++)
         {
-            dp[i][j] = 0;
+            table[i][w] = table[i-1][w];   // not take item
+
+            if(weight[i-1] <= w)
+            {
+                int candidate = value[i-1] +
+                                table[i-1][w - weight[i-1]];
+
+                if(candidate > table[i][w])
+                    table[i][w] = candidate;   // take item
+            }
         }
     }
 
-    /* build DP table */
-    for(i = 1; i <= n; i++)
+    /* find selected items */
+    int *result = (int*)calloc(itemCount, sizeof(int));
+
+    int remainingWeight = capacity;
+
+    for(i = itemCount; i > 0; i--)
     {
-        for(j = 0; j <= maxW; j++)
+        if(table[i][remainingWeight] != table[i-1][remainingWeight])
         {
-            int withoutItem = dp[i-1][j];
-            int withItem = 0;
-
-            if(w[i-1] <= j)
-                withItem = v[i-1] + dp[i-1][j - w[i-1]];
-
-            if(withItem > withoutItem)
-                dp[i][j] = withItem;
-            else
-                dp[i][j] = withoutItem;
+            result[i-1] = 1;
+            remainingWeight -= weight[i-1];
         }
     }
 
-    /* track selected items */
-    int *ans = (int*)calloc(n, sizeof(int));
-    int remain = maxW;
-
-    for(i = n; i > 0; i--)
-    {
-        if(dp[i][remain] != dp[i-1][remain])
-        {
-            ans[i-1] = 1;
-            remain -= w[i-1];
-        }
-    }
-
-    return ans;
+    return result;
 }
 
 int main()
 {
-    int n = 5, wx = 11;
+    int n = 5;
+    int wx = 11;   // max capacity
 
     int w[5] = {1, 2, 5, 6, 7};
     int v[5] = {1, 6, 18, 22, 28};
 
     int *x = KnapsackDP(w, v, n, wx);
 
+    /* print result */
     for(int i = 0; i < n; i++)
         printf("%d ", x[i]);
 
