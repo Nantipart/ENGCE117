@@ -1,59 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int KnapsackBT(int *w, int *v, int n, int wx, int i, int *x)
+/*
+   Knapsack Backtracking
+   w  = weight array
+   v  = value array
+   n  = number of items
+   wx = remaining capacity
+   i  = current item index
+   x  = selected item result
+*/
+int KnapsackBT(int *weight, int *value, int n, int capacity, int startIndex, int *result)
 {
     int bestValue = 0;
-    int bestSet[n];
+    int bestChoice[n];
 
-    for(int t = 0; t < n; t++)
-        bestSet[t] = 0;
+    for(int index = 0; index < n; index++)
+        bestChoice[index] = 0;
 
-    for(int k = i; k < n; k++)
+    for(int item = startIndex; item < n; item++)
     {
-        if(w[k] <= wx)
+        /* Check if current item can be placed in knapsack */
+        if(weight[item] > capacity)
+            continue;
+
+        int childChoice[n];
+
+        for(int k = 0; k < n; k++)
+            childChoice[k] = 0;
+
+        /* Recursive exploration of remaining items */
+        int currentValue = value[item] +
+                           KnapsackBT(weight,
+                                      value,
+                                      n,
+                                      capacity - weight[item],
+                                      item + 1,
+                                      childChoice);
+
+        /* Update best solution if better value found */
+        if(currentValue > bestValue)
         {
-            int childSet[n];
+            bestValue = currentValue;
 
-            for(int j = 0; j < n; j++)
-                childSet[j] = 0;
+            for(int k = 0; k < n; k++)
+                bestChoice[k] = childChoice[k];
 
-            int value = v[k] + KnapsackBT(w, v, n, wx - w[k], k + 1, childSet);
-
-            if(value > bestValue)
-            {
-                bestValue = value;
-
-                for(int j = 0; j < n; j++)
-                    bestSet[j] = childSet[j];
-
-                bestSet[k] = 1;
-            }
+            bestChoice[item] = 1;
         }
     }
 
-    for(int j = 0; j < n; j++)
-        x[j] = bestSet[j];
+    /* Copy best result to output array */
+    for(int k = 0; k < n; k++)
+        result[k] = bestChoice[k];
 
     return bestValue;
 }
 
 int main()
 {
-    int n = 5, wx = 11;
-    int w[5] = {1,2,5,6,7};
-    int v[5] = {1,6,18,22,28};
+    int numberOfItems = 5;
+    int maxWeight = 11;
 
-    int *x, vx;
+    int weight[5] = {1,2,5,6,7};
+    int value[5]  = {1,6,18,22,28};
 
-    x = (int*)malloc(n * sizeof(int));
+    int *selectedItems;
+    int bestValue;
 
-    vx = KnapsackBT(w, v, n, wx, 0, x);
+    selectedItems = (int*)malloc(numberOfItems * sizeof(int));
 
-    printf("Value = %d\n", vx);
+    /* Run Knapsack Backtracking */
+    bestValue = KnapsackBT(weight,
+                           value,
+                           numberOfItems,
+                           maxWeight,
+                           0,
+                           selectedItems);
 
-    for(int i = 0; i < n; i++)
-        printf("%d ", x[i]);
+    printf("Value = %d\n", bestValue);
+
+    for(int i = 0; i < numberOfItems; i++)
+        printf("%d ", selectedItems[i]);
+
+    free(selectedItems);
 
     return 0;
 }
