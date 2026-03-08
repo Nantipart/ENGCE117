@@ -2,66 +2,76 @@
 #include <stdlib.h>
 
 /* Dynamic Programming Knapsack */
-int *KnapsackDP(int *weight, int *value, int n, int capacity)
+int *KnapsackDP(int *w, int *val, int n, int maxW)
 {
     int i, j;
 
-    /* create DP table */
-    int **K = (int**)malloc((n + 1) * sizeof(int*));
+    /* allocate DP table */
+    int **dp = (int**)malloc((n + 1) * sizeof(int*));
     for(i = 0; i <= n; i++)
-        K[i] = (int*)malloc((capacity + 1) * sizeof(int));
+    {
+        dp[i] = (int*)malloc((maxW + 1) * sizeof(int));
+    }
 
-    /* initialize first row and column */
+    /* initialize table */
     for(i = 0; i <= n; i++)
-        K[i][0] = 0;
+    {
+        for(j = 0; j <= maxW; j++)
+        {
+            if(i == 0 || j == 0)
+                dp[i][j] = 0;
+            else
+                dp[i][j] = 0;
+        }
+    }
 
-    for(j = 0; j <= capacity; j++)
-        K[0][j] = 0;
-
-    /* fill table */
+    /* fill dp table */
     for(i = 1; i <= n; i++)
     {
-        for(j = 0; j <= capacity; j++)
+        for(j = 0; j <= maxW; j++)
         {
-            int notChoose = K[i-1][j];
-            int choose = notChoose;
-
-            if(weight[i-1] <= j)
+            if(w[i-1] > j)
             {
-                int temp = value[i-1] + K[i-1][j - weight[i-1]];
-                if(temp > choose)
-                    choose = temp;
+                dp[i][j] = dp[i-1][j];
             }
+            else
+            {
+                int take = val[i-1] + dp[i-1][j - w[i-1]];
+                int skip = dp[i-1][j];
 
-            K[i][j] = choose;
+                if(take > skip)
+                    dp[i][j] = take;
+                else
+                    dp[i][j] = skip;
+            }
         }
     }
 
     /* determine selected items */
-    int *selected = (int*)calloc(n, sizeof(int));
-    int capLeft = capacity;
+    int *result = (int*)calloc(n, sizeof(int));
+    int remain = maxW;
 
     for(i = n; i > 0; i--)
     {
-        if(K[i][capLeft] > K[i-1][capLeft])
+        if(dp[i][remain] != dp[i-1][remain])
         {
-            selected[i-1] = 1;
-            capLeft = capLeft - weight[i-1];
+            result[i-1] = 1;
+            remain -= w[i-1];
         }
     }
 
-    return selected;
+    return result;
 }
 
 int main()
 {
-    int n = 5;
-    int wx = 11;
+    int n = 5, wx = 11;
 
     int w[5] = {1, 2, 5, 6, 7};
     int v[5] = {1, 6, 18, 22, 28};
 
-    int *x = KnapsackDP(w, v, n, wx);
+    int *x;
+    x = KnapsackDP(w, v, n, wx);
 
     for(int i = 0; i < n; i++)
         printf("%d ", x[i]);
