@@ -1,65 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *KnapsackDP(int *weight, int *value, int itemCount, int capacity)
+/* Dynamic Programming Knapsack */
+int *KnapsackDP(int *w, int *v, int n, int maxW)
 {
-    int i, w;
+    int i, j;
 
-    /* create DP table */
-    int **table = (int**)malloc((itemCount + 1) * sizeof(int*));
+    /* allocate DP matrix */
+    int **dp = (int**)malloc((n + 1) * sizeof(int*));
+    for(i = 0; i <= n; i++)
+        dp[i] = (int*)malloc((maxW + 1) * sizeof(int));
 
-    for(i = 0; i <= itemCount; i++)
-        table[i] = (int*)malloc((capacity + 1) * sizeof(int));
-
-    /* initialize table */
-    for(i = 0; i <= itemCount; i++)
-        for(w = 0; w <= capacity; w++)
-            table[i][w] = 0;
+    /* set initial values */
+    for(i = 0; i <= n; i++)
+    {
+        for(j = 0; j <= maxW; j++)
+        {
+            dp[i][j] = 0;
+        }
+    }
 
     /* build DP table */
-    for(i = 1; i <= itemCount; i++)
+    for(i = 1; i <= n; i++)
     {
-        for(w = 0; w <= capacity; w++)
+        for(j = 0; j <= maxW; j++)
         {
-            table[i][w] = table[i-1][w];
+            int withoutItem = dp[i-1][j];
+            int withItem = 0;
 
-            if(weight[i-1] <= w)
-            {
-                int candidate = value[i-1] +
-                                table[i-1][w - weight[i-1]];
+            if(w[i-1] <= j)
+                withItem = v[i-1] + dp[i-1][j - w[i-1]];
 
-                if(candidate > table[i][w])
-                    table[i][w] = candidate;
-            }
+            if(withItem > withoutItem)
+                dp[i][j] = withItem;
+            else
+                dp[i][j] = withoutItem;
         }
     }
 
-    /* reconstruct selected items */
-    int *result = (int*)calloc(itemCount, sizeof(int));
+    /* track selected items */
+    int *ans = (int*)calloc(n, sizeof(int));
+    int remain = maxW;
 
-    int remainingWeight = capacity;
-
-    for(i = itemCount; i > 0; i--)
+    for(i = n; i > 0; i--)
     {
-        if(table[i][remainingWeight] != table[i-1][remainingWeight])
+        if(dp[i][remain] != dp[i-1][remain])
         {
-            result[i-1] = 1;
-            remainingWeight -= weight[i-1];
+            ans[i-1] = 1;
+            remain -= w[i-1];
         }
     }
 
-    return result;
+    return ans;
 }
 
 int main()
 {
     int n = 5, wx = 11;
-    int w[5] = {1,2,5,6,7};
-    int v[5] = {1,6,18,22,28};
 
-    int *x;
+    int w[5] = {1, 2, 5, 6, 7};
+    int v[5] = {1, 6, 18, 22, 28};
 
-    x = KnapsackDP(w, v, n, wx);
+    int *x = KnapsackDP(w, v, n, wx);
 
     for(int i = 0; i < n; i++)
         printf("%d ", x[i]);
